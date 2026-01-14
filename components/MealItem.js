@@ -6,21 +6,35 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import MealDetail from "./MealDetails";
 
-function MealItem({ title, imageUrl, duration, complexity, affordability }) {
+function MealItem({
+  title,
+  imageUrl,
+  duration,
+  complexity,
+  id,
+  affordability,
+}) {
+  const navigation = useNavigation();
+
+  function selectMealItemHandler() {
+    navigation.navigate("MealDetail", { mealId: id });
+  }
+
   return (
     <View style={styles.mealItem}>
-      <Pressable>
+      <Pressable onPress={selectMealItemHandler}>
         <View>
           <Image source={{ uri: imageUrl }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
         </View>
-
-        <View style={styles.details}>
-          <Text style={styles.detailsItem}>{duration}m</Text>
-          <Text style={styles.detailsItem}>{complexity.toUpperCase()}</Text>
-          <Text style={styles.detailsItem}>{complexity.toUpperCase()}</Text>
-        </View>
+        <MealDetail
+          duration={duration}
+          complexity={complexity}
+          affordability={affordability}
+        />
       </Pressable>
     </View>
   );
@@ -50,15 +64,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     margin: 8,
     textAlign: "center",
-  },
-  details: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 8,
-  },
-  detailsItem: {
-    marginHorizontal: 4,
-    fontSize: 12,
   },
 });
